@@ -140,26 +140,36 @@
       background-color: #f8fafd;
       border-radius: 8px;
     }
+
+    /* 讓 textarea placeholder 更淡 */
+    textarea::placeholder {
+      color: #cfd8dc !important;
+      opacity: 1 !important;
+    }
+    textarea::-webkit-input-placeholder { color: #cfd8dc !important; }
+    textarea::-moz-placeholder { color: #cfd8dc !important; }
+    textarea:-ms-input-placeholder { color: #cfd8dc !important; }
+    textarea::-ms-input-placeholder { color: #cfd8dc !important; }
     
     /* 響應式調整 */
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
-      }
+      }      
     }
   </style>
 </head>
 <body>
 <div id="app" class="container py-4">
-  <div class="page-header text-center">
+  <div class="page-header">
     <h2 class="page-title">木板最佳佈局計算器</h2>
     <p class="text-muted">輸入木板尺寸，自動計算最佳切割方案</p>
   </div>
 
   <form @submit.prevent="calculateLayout">
     <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">木板清單</h5>
+      <div class="card-header d-flex justify-content-between flex-md-row flex-column align-items-start align-items-md-center">
+        <h5 class="card-title mb-md-0 mb-2">木板清單</h5>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#csvImport">
             <i class="fas fa-file-import me-2"></i>
@@ -196,26 +206,26 @@
         <div class="list-group list-group-flush mb-3">
           <div class="list-group-item px-0 py-3" v-for="(board, index) in boards" :key="board.id">
             <div class="row g-3 align-items-end">
-              <div class="col">
+              <div class="col-md col-12">
                 <label class="form-label">編號</label>
                 <input type="text" class="form-control" v-model="board.label" placeholder="輸入編號">
               </div>
-              <div class="col">
+              <div class="col-md col-6">
                 <label class="form-label">寬度（台尺）</label>
                 <div class="input-group">
                   <input type="number" class="form-control" v-model.number="board.width" step="0.01" min="0">
                   <span class="input-group-text">尺</span>
                 </div>
               </div>
-              <div class="col">
+              <div class="col-md col-6">
                 <label class="form-label">長度（台尺）</label>
                 <div class="input-group">
                   <input type="number" class="form-control" v-model.number="board.length" step="0.01" min="0">
                   <span class="input-group-text">尺</span>
                 </div>
               </div>
-              <div class="col-auto ms-auto">
-                <button class="btn btn-outline-danger" type="button" @click="removeBoard(board.id)">
+              <div class="col-md-auto col-12">
+                <button class="btn btn-outline-danger w-100" type="button" @click="removeBoard(board.id)">
                   <i class="fas fa-trash-alt me-2"></i>刪除
                 </button>
               </div>
