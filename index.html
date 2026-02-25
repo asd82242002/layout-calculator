@@ -288,7 +288,7 @@
             <div class="col-md-4">
               <label class="form-label">材料寬度</label>
               <div class="input-group mb-1">
-                <input type="number" class="form-control" v-model.number="materialWidth" step="0.1" min="0">
+                <input type="number" class="form-control" v-model.number="materialWidth" step="0.01" min="0">
                 <span class="input-group-text">台尺</span>
               </div>
               <small class="text-muted">設定材料的標準寬度</small>
@@ -296,7 +296,7 @@
             <div class="col-md-4">
               <label class="form-label">預留量</label>
               <div class="input-group mb-1">
-                <input type="number" class="form-control" v-model.number="margin" step="0.1" min="0">
+                <input type="number" class="form-control" v-model.number="margin" step="0.01" min="0">
                 <span class="input-group-text">台尺</span>
               </div>
               <small class="text-muted">設定切割間隙預留量</small>
@@ -339,7 +339,7 @@
             <div class="bg-white px-4 py-2 rounded-3 shadow-sm">
               <div class="text-primary-emphasis small fw-medium mb-1">總材料長度</div>
               <div class="h2 mb-0 fw-bold text-primary lh-1">
-                {{ result.totalLength.toFixed(1) }}
+                {{ result.totalLength.toFixed(2) }}
                 <small class="fs-6 fw-normal text-primary-emphasis ms-1">台尺</small>
               </div>
             </div>
@@ -356,12 +356,12 @@
                   </div>
                   <div class="text-muted">
                     <i class="fas fa-ruler-combined me-1"></i>
-                    長度: {{ row.row_length.toFixed(1) }} 尺
+                    長度: {{ row.row_length.toFixed(2) }} 尺
                   </div>
                 </div>
                 <div class="text-muted">
                   <i class="fas fa-arrows-left-right-to-line me-1"></i>
-                  使用寬度: {{ row.used_width.toFixed(1) }} / {{ materialWidth.toFixed(1) }} 尺
+                  使用寬度: {{ row.used_width.toFixed(2) }} / {{ materialWidth.toFixed(2) }} 尺
                   <span class="ms-2 small text-primary">({{ (row.used_width / materialWidth * 100).toFixed(1)
                     }}%)</span>
                 </div>
@@ -743,7 +743,7 @@
               Swal.fire({
                 icon: 'error',
                 title: '木板尺寸錯誤',
-                text: `木板 ${board.label} (${board.width.toFixed(1)}×${board.length.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
+                text: `木板 ${board.label} (${board.width.toFixed(2)}×${board.length.toFixed(2)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(2)}`
               });
               return;
             }
@@ -762,7 +762,7 @@
               Swal.fire({
                 icon: 'error',
                 title: '預留量設定錯誤',
-                text: `加入預留量後，木板尺寸 (${w.toFixed(1)}×${l.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
+                text: `加入預留量後，木板尺寸 (${w.toFixed(2)}×${l.toFixed(2)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(2)}`
               });
               return;
             }
@@ -1001,7 +1001,7 @@
                 if (itemIndex === row.items.length - 1) {
                   ctx.fillStyle = '#dc3545';
                   ctx.textAlign = 'left';
-                  ctx.fillText(`長度: ${row.row_length.toFixed(1)}尺`, currentX + width + spacing, topPadding + height / 2);
+                  ctx.fillText(`長度: ${row.row_length.toFixed(2)}尺`, currentX + width + spacing, topPadding + height / 2);
                 }
 
                 currentX += width + (itemIndex < row.items.length - 1 ? spacing : 0);
