@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="zh-TW">  <head>
+<html lang="zh-TW">
+
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="木板最佳佈局計算器，支援尺寸輸入、CSV匯入，協助快速計算木板切割與材料利用率。">
@@ -16,126 +18,142 @@
       background-color: #f8f9fa;
       color: #2c3e50;
     }
+
     .container {
       max-width: 1140px;
       padding: 2rem 1rem;
     }
-    
+
     /* 卡片樣式 */
     .card {
       background: #fff;
       border: none;
       border-radius: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
       margin-bottom: 2rem;
       transition: all 0.3s ease;
     }
+
     .card:hover {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
       transform: translateY(-1px);
     }
+
     .card-header {
       background: #eef2ff !important;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       padding: 1rem 1.25rem;
       min-height: 64px;
       display: flex;
       align-items: center;
     }
+
     .card-header h5 {
       color: #1a73e8;
       font-weight: 600;
       margin: 0;
-    }    
+    }
+
     .badge {
       padding: 0.5rem 0.75rem;
       font-weight: 500;
     }
+
     .result-stats {
       font-size: 0.875rem;
       color: #6c757d;
     }
-    
+
     /* 表單元素 */
     .form-label {
       color: #4a5568;
       font-weight: 500;
       margin-bottom: 0.5rem;
     }
+
     .form-control {
       border-radius: 8px;
       border: 1px solid #e2e8f0;
       /* padding: 0.625rem 1rem; */
       transition: border-color 0.2s ease;
     }
+
     .form-control:focus {
       border-color: #1a73e8;
-      box-shadow: 0 0 0 3px rgba(26,115,232,0.1);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
     }
+
     .form-switch {
       padding: .375rem 0 .375rem 2.5rem;
     }
 
-    
+
     /* 按鈕樣式 */
     .btn {
       font-weight: 500;
       border-radius: 6px;
       transition: all 0.2s ease;
     }
+
     .btn:hover {
       transform: translateY(-1px);
-    }    
+    }
+
     .btn-primary {
       background-color: #1a73e8;
       border-color: #1a73e8;
     }
+
     .btn-primary:hover {
       background-color: #1557b0;
       border-color: #1557b0;
     }
+
     .btn-success {
       background-color: #34a853;
       border-color: #34a853;
     }
+
     .btn-success:hover {
       background-color: #2d8a45;
       border-color: #2d8a45;
     }
-    
+
     /* 畫布容器 */
     .canvas-container {
       margin: 1rem 0;
       padding: 1.5rem;
       background: #fff;
       border-radius: 12px;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
     }
+
     canvas {
       border: 1px solid #e2e8f0;
       max-width: 100%;
       height: auto;
       display: block;
     }
-    
+
     /* 頁面頭部 */
     .page-header {
       text-align: center;
       margin-bottom: 3rem;
     }
+
     .page-title {
       color: #1a73e8;
       font-weight: 700;
       margin-bottom: 0.75rem;
     }
-    
+
     /* 列表項目 */
     .list-group-item {
       background-color: transparent;
       padding: 1.25rem 0;
-      border-color: rgba(0,0,0,0.05);
+      border-color: rgba(0, 0, 0, 0.05);
     }
-    
+
     /* CSV 匯入區塊 */
     #csvImport .card-body {
       background-color: #f8fafd;
@@ -147,439 +165,460 @@
       color: #cfd8dc !important;
       opacity: 1 !important;
     }
-    textarea::-webkit-input-placeholder { color: #cfd8dc !important; }
-    textarea::-moz-placeholder { color: #cfd8dc !important; }
-    textarea:-ms-input-placeholder { color: #cfd8dc !important; }
-    textarea::-ms-input-placeholder { color: #cfd8dc !important; }
-    
+
+    textarea::-webkit-input-placeholder {
+      color: #cfd8dc !important;
+    }
+
+    textarea::-moz-placeholder {
+      color: #cfd8dc !important;
+    }
+
+    textarea:-ms-input-placeholder {
+      color: #cfd8dc !important;
+    }
+
+    textarea::-ms-input-placeholder {
+      color: #cfd8dc !important;
+    }
+
     /* 響應式調整 */
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
-      }      
+      }
     }
   </style>
 </head>
+
 <body>
-<div id="app" class="container py-4">
-  <div class="page-header">
-    <h2 class="page-title">木板最佳佈局計算器</h2>
-    <p class="text-muted">輸入木板尺寸，自動計算最佳切割方案</p>
-  </div>
+  <div id="app" class="container py-4">
+    <div class="page-header">
+      <h2 class="page-title">木板最佳佈局計算器</h2>
+      <p class="text-muted">輸入木板尺寸，自動計算最佳切割方案</p>
+    </div>
 
-  <form @submit.prevent="calculateLayout">
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between flex-md-row flex-column align-items-start align-items-md-center">
-        <h5 class="card-title mb-md-0 mb-2">木板清單</h5>
-        <div class="d-flex gap-2 flex-wrap">
-          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#csvImport">
-            <i class="fas fa-file-import me-2"></i>
-            CSV 匯入
-          </button>
-          <button type="button" class="btn btn-primary btn-sm" @click="addBoard">
-            <i class="fas fa-plus me-2"></i>
-            新增木板
-          </button>
-          <button type="button" class="btn btn-secondary btn-sm btn-reset" @click="resetBoards">
-            <i class="fas fa-rotate-left me-2"></i>清空木板
-          </button>
-          <button type="button" class="btn btn-success btn-sm" @click="saveBoardsList">
-            <i class="fas fa-save me-2"></i>儲存清單
-          </button>
-          <button type="button" class="btn btn-outline-dark btn-sm" @click="showBoardsListManager">
-            <i class="fas fa-list me-2"></i>載入/管理清單
-          </button>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="collapse mb-4" id="csvImport">
-          <div class="card">
-            <div class="card-body bg-light">
-              <h6 class="mb-3">CSV 格式說明</h6>
-              <p class="text-muted small mb-3">每行一筆資料，格式為：編號,寬度,長度</p>
-              <div class="mb-3">
-                <textarea class="form-control font-monospace" v-model="csvInput" rows="5" placeholder="A,1.0,2.0&#10;B,3.2,1.7&#10;C,2.7,3.3"></textarea>
-              </div>
-              <div class="text-end">
-                <button type="button" class="btn btn-primary btn-sm" @click="importCSV">
-                  <i class="fas fa-file-import me-2"></i>
-                  匯入資料
-                </button>
-              </div>
-            </div>
+    <form @submit.prevent="calculateLayout">
+      <div class="card mb-4">
+        <div
+          class="card-header d-flex justify-content-between flex-md-row flex-column align-items-start align-items-md-center">
+          <h5 class="card-title mb-md-0 mb-2">木板清單</h5>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse"
+              data-bs-target="#csvImport">
+              <i class="fas fa-file-import me-2"></i>
+              CSV 匯入
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" @click="addBoard">
+              <i class="fas fa-plus me-2"></i>
+              新增木板
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm btn-reset" @click="resetBoards">
+              <i class="fas fa-rotate-left me-2"></i>清空木板
+            </button>
+            <button type="button" class="btn btn-success btn-sm" @click="saveBoardsList">
+              <i class="fas fa-save me-2"></i>儲存清單
+            </button>
+            <button type="button" class="btn btn-outline-dark btn-sm" @click="showBoardsListManager">
+              <i class="fas fa-list me-2"></i>載入/管理清單
+            </button>
           </div>
         </div>
-
-        <div class="list-group list-group-flush mb-3">
-          <div v-if="boards.length === 0" class="text-center text-muted py-4">
-            尚未新增任何木板，請點擊「新增木板」或使用「CSV 匯入」快速建立清單。
-          </div>
-          <div class="list-group-item px-0 py-3" v-for="(board, index) in boards" :key="board.id">
-            <div class="row g-3 align-items-end">
-              <div class="col-md col-12">
-                <label class="form-label">編號</label>
-                <input type="text" class="form-control" v-model="board.label" placeholder="輸入編號">
-              </div>
-              <div class="col-md col-6">
-                <label class="form-label">寬度（台尺）</label>
-                <div class="input-group">
-                  <input type="number" class="form-control" v-model.number="board.width" step="0.01" min="0">
-                  <span class="input-group-text">尺</span>
+        <div class="card-body">
+          <div class="collapse mb-4" id="csvImport">
+            <div class="card">
+              <div class="card-body bg-light">
+                <h6 class="mb-3">CSV 格式說明</h6>
+                <p class="text-muted small mb-3">每行一筆資料，格式為：編號,寬度,長度</p>
+                <div class="mb-3">
+                  <textarea class="form-control font-monospace" v-model="csvInput" rows="5"
+                    placeholder="A,1.0,2.0&#10;B,3.2,1.7&#10;C,2.7,3.3"></textarea>
+                </div>
+                <div class="text-end">
+                  <button type="button" class="btn btn-primary btn-sm" @click="importCSV">
+                    <i class="fas fa-file-import me-2"></i>
+                    匯入資料
+                  </button>
                 </div>
               </div>
-              <div class="col-md col-6">
-                <label class="form-label">長度（台尺）</label>
-                <div class="input-group">
-                  <input type="number" class="form-control" v-model.number="board.length" step="0.01" min="0">
-                  <span class="input-group-text">尺</span>
+            </div>
+          </div>
+
+          <div class="list-group list-group-flush mb-3">
+            <div v-if="boards.length === 0" class="text-center text-muted py-4">
+              尚未新增任何木板，請點擊「新增木板」或使用「CSV 匯入」快速建立清單。
+            </div>
+            <div class="list-group-item px-0 py-3" v-for="(board, index) in boards" :key="board.id">
+              <div class="row g-3 align-items-end">
+                <div class="col-md col-12">
+                  <label class="form-label">編號</label>
+                  <input type="text" class="form-control" v-model="board.label" placeholder="輸入編號">
+                </div>
+                <div class="col-md col-6">
+                  <label class="form-label">寬度（台尺）</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" v-model.number="board.width" step="0.01" min="0">
+                    <span class="input-group-text">尺</span>
+                  </div>
+                </div>
+                <div class="col-md col-6">
+                  <label class="form-label">長度（台尺）</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" v-model.number="board.length" step="0.01" min="0">
+                    <span class="input-group-text">尺</span>
+                  </div>
+                </div>
+                <div class="col-md-auto col-12">
+                  <button class="btn btn-outline-danger w-100" type="button" @click="removeBoard(board.id)">
+                    <i class="fas fa-trash-alt me-2"></i>刪除
+                  </button>
                 </div>
               </div>
-              <div class="col-md-auto col-12">
-                <button class="btn btn-outline-danger w-100" type="button" @click="removeBoard(board.id)">
-                  <i class="fas fa-trash-alt me-2"></i>刪除
-                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">材料設定</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-4">
+            <div class="col-md-4">
+              <label class="form-label">材料寬度</label>
+              <div class="input-group mb-1">
+                <input type="number" class="form-control" v-model.number="materialWidth" step="0.1" min="0">
+                <span class="input-group-text">台尺</span>
+              </div>
+              <small class="text-muted">設定材料的標準寬度</small>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">預留量</label>
+              <div class="input-group mb-1">
+                <input type="number" class="form-control" v-model.number="margin" step="0.1" min="0">
+                <span class="input-group-text">台尺</span>
+              </div>
+              <small class="text-muted">設定切割間隙預留量</small>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">旋轉設定</label>
+              <div class="input-group bg-transparent border-0 mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="rotateSwitch" v-model="allowRotation">
+                  <label class="form-check-label" for="rotateSwitch">允許木板旋轉</label>
+                </div>
+              </div>
+              <small class="text-muted">允許旋轉以找出更好的排列方式</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+        <button type="submit" class="btn btn-primary btn-lg px-5 position-relative">
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="fas fa-calculator me-2"></i>
+            <span>開始計算最佳佈局</span>
+          </div>
+        </button>
+      </div>
+    </form>
+
+    <div v-if="result" class="mt-4">
+      <div class="card mb-4">
+        <div class="card-header bg-primary-subtle py-3">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="me-4">
+              <h4 class="mb-1 text-primary-emphasis d-flex align-items-center">
+                <i class="fas fa-check-circle me-2"></i>
+                最佳佈局結果
+              </h4>
+              <p class="mb-0 text-primary small">以下是根據您輸入的木板尺寸計算出的最佳切割方案</p>
+            </div>
+            <div class="bg-white px-4 py-2 rounded-3 shadow-sm">
+              <div class="text-primary-emphasis small fw-medium mb-1">總材料長度</div>
+              <div class="h2 mb-0 fw-bold text-primary lh-1">
+                {{ result.totalLength.toFixed(1) }}
+                <small class="fs-6 fw-normal text-primary-emphasis ms-1">台尺</small>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="card-title mb-0">材料設定</h5>
-      </div>
-      <div class="card-body">
-        <div class="row g-4">
-          <div class="col-md-4">
-            <label class="form-label">材料寬度</label>
-            <div class="input-group mb-1">
-              <input type="number" class="form-control" v-model.number="materialWidth" step="0.1" min="0">
-              <span class="input-group-text">台尺</span>
-            </div>
-            <small class="text-muted">設定材料的標準寬度</small>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">預留量</label>
-            <div class="input-group mb-1">
-              <input type="number" class="form-control" v-model.number="margin" step="0.1" min="0">
-              <span class="input-group-text">台尺</span>
-            </div>
-            <small class="text-muted">設定切割間隙預留量</small>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">旋轉設定</label>
-            <div class="input-group bg-transparent border-0 mb-1">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="rotateSwitch" v-model="allowRotation">
-                <label class="form-check-label" for="rotateSwitch">允許木板旋轉</label>
-              </div>
-            </div>
-            <small class="text-muted">允許旋轉以找出更好的排列方式</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
-      <button type="submit" class="btn btn-primary btn-lg px-5 position-relative">
-        <div class="d-flex align-items-center justify-content-center">
-          <i class="fas fa-calculator me-2"></i>
-          <span>開始計算最佳佈局</span>
-        </div>
-      </button>
-    </div>
-  </form>
-
-  <div v-if="result" class="mt-4">
-    <div class="card mb-4">
-      <div class="card-header bg-primary-subtle py-3">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div class="me-4">
-            <h4 class="mb-1 text-primary-emphasis d-flex align-items-center">
-              <i class="fas fa-check-circle me-2"></i>
-              最佳佈局結果
-            </h4>
-            <p class="mb-0 text-primary small">以下是根據您輸入的木板尺寸計算出的最佳切割方案</p>
-          </div>
-          <div class="bg-white px-4 py-2 rounded-3 shadow-sm">
-            <div class="text-primary-emphasis small fw-medium mb-1">總材料長度</div>
-            <div class="h2 mb-0 fw-bold text-primary lh-1">
-              {{ result.totalLength.toFixed(1) }}
-              <small class="fs-6 fw-normal text-primary-emphasis ms-1">台尺</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body p-0">
-        <div class="list-group list-group-flush">
-          <div v-for="(row, rowIndex) in result.rows" :key="rowIndex" class="list-group-item p-4">
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-              <div class="d-flex align-items-center">
-                <div class="badge bg-primary-subtle text-primary-emphasis fs-6 me-3">
-                  <i class="fas fa-layer-group me-1"></i>
-                  第 {{ rowIndex + 1 }} 列
+        <div class="card-body p-0">
+          <div class="list-group list-group-flush">
+            <div v-for="(row, rowIndex) in result.rows" :key="rowIndex" class="list-group-item p-4">
+              <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+                <div class="d-flex align-items-center">
+                  <div class="badge bg-primary-subtle text-primary-emphasis fs-6 me-3">
+                    <i class="fas fa-layer-group me-1"></i>
+                    第 {{ rowIndex + 1 }} 列
+                  </div>
+                  <div class="text-muted">
+                    <i class="fas fa-ruler-combined me-1"></i>
+                    長度: {{ row.row_length.toFixed(1) }} 尺
+                  </div>
                 </div>
                 <div class="text-muted">
-                  <i class="fas fa-ruler-combined me-1"></i>
-                  長度: {{ row.row_length.toFixed(1) }} 尺
+                  <i class="fas fa-arrows-left-right-to-line me-1"></i>
+                  使用寬度: {{ row.used_width.toFixed(1) }} / {{ materialWidth.toFixed(1) }} 尺
+                  <span class="ms-2 small text-primary">({{ (row.used_width / materialWidth * 100).toFixed(1)
+                    }}%)</span>
                 </div>
               </div>
-              <div class="text-muted">
-                <i class="fas fa-arrows-left-right-to-line me-1"></i>
-                使用寬度: {{ row.used_width.toFixed(1) }} / {{ materialWidth.toFixed(1) }} 尺
-                <span class="ms-2 small text-primary">({{ (row.used_width / materialWidth * 100).toFixed(1) }}%)</span>
+              <div class="canvas-container">
+                <canvas :ref="el => { canvasRefs[rowIndex] = el }" width="800" height="300"></canvas>
               </div>
-            </div>
-            <div class="canvas-container">
-              <canvas :ref="el => { canvasRefs[rowIndex] = el }" width="800" height="300"></canvas>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <footer class="text-center text-muted py-3 small">
+      &copy; 2025 橋成有限公司 All Rights Reserved.
+    </footer>
   </div>
 
-  <footer class="text-center text-muted py-3 small">
-    &copy; 2025 橋成有限公司 All Rights Reserved.
-  </footer>
-</div>
+  <script>
+    const { createApp } = Vue;
 
-<script>
-const { createApp } = Vue;
-
-createApp({
-  data() {
-    return {
-      boards: [],
-      csvInput: '',  // 新增CSV輸入欄位
-      materialWidth: 4.6,
-      margin: 0.3, // 預設預留量 0.1 台尺
-      allowRotation: false,
-      result: null,
-      memo: {},
-      canvasRefs: {}, // 新增這行
-      boardCounter: 1
-    };
-  },
-  mounted() {
-    // 頁面載入時自動從 localStorage 載入 boards
-    const savedBoards = localStorage.getItem('boards');
-    if (savedBoards) {
-      try {
-        this.boards = JSON.parse(savedBoards);
-      } catch (e) {
-        this.boards = [];
-      }
-    }
-  },
-  watch: {
-    boards: {
-      handler(newVal) {
-        // boards 變動時自動儲存到 localStorage
-        localStorage.setItem('boards', JSON.stringify(newVal));
-      },
-      deep: true
-    }
-  },
-  methods: {
-    addBoard() {
-      this.boards.push({ id: Date.now() + Math.random(), label: '', width: 0, length: 0 });
-    },
-    removeBoard(id) {
-      this.boards = this.boards.filter(b => b.id !== id);
-    },
-    resetBoards() {
-      this.boards = [];
-    },
-    saveBoardsList() {
-      // 檢查是否有木板資料
-      if (this.boards.length === 0) {
-        Swal.fire({ icon: 'warning', title: '無法儲存', text: '目前清單為空，請先新增木板資料。' });
-        return;
-      }
-
-      try {
-        let lists = JSON.parse(localStorage.getItem('boardsLists')) || {};
-        const existingNames = Object.keys(lists);
-        
-        // 準備現有清單選項（按時間排序）
-        const sortedNames = existingNames.sort((a, b) => {
-          const timeA = lists[a].createdAt || '1970-01-01';
-          const timeB = lists[b].createdAt || '1970-01-01';
-          return new Date(timeB) - new Date(timeA);
-        });
-
-        const formatDate = (isoString) => {
-          if (!isoString) return '';
-          try {
-            return new Date(isoString).toLocaleString('zh-TW', {
-              month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
-            });
-          } catch (e) {
-            return '';
-          }
+    createApp({
+      data() {
+        return {
+          boards: [],
+          csvInput: '',  // CSV輸入欄位
+          materialWidth: 4.6,
+          margin: 0.3, // 預設預留量 0.3 台尺
+          allowRotation: false,
+          result: null,
+          canvasRefs: {},
+          boardCounter: 1,
+          _saveTimer: null // 防抖用計時器（內部使用）
         };
+      },
+      mounted() {
+        // 頁面載入時自動從 localStorage 載入 boards
+        const savedBoards = localStorage.getItem('boards');
+        if (savedBoards) {
+          try {
+            this.boards = JSON.parse(savedBoards);
+          } catch (e) {
+            this.boards = [];
+          }
+        }
+      },
+      watch: {
+        boards: {
+          handler(newVal) {
+            // boards 變動時以防抖機制儲存到 localStorage，避免每次按鍵都觸發序列化
+            clearTimeout(this._saveTimer);
+            this._saveTimer = setTimeout(() => {
+              localStorage.setItem('boards', JSON.stringify(newVal));
+            }, 300); // 300ms 防抖延遲
+          },
+          deep: true
+        }
+      },
+      methods: {
+        addBoard() {
+          this.boards.push({ id: Date.now() + Math.random(), label: '', width: 0, length: 0 });
+        },
+        removeBoard(id) {
+          const idx = this.boards.findIndex(b => b.id === id);
+          if (idx !== -1) this.boards.splice(idx, 1);
+        },
+        resetBoards() {
+          this.boards = [];
+        },
+        saveBoardsList() {
+          // 檢查是否有木板資料
+          if (this.boards.length === 0) {
+            Swal.fire({ icon: 'warning', title: '無法儲存', text: '目前清單為空，請先新增木板資料。' });
+            return;
+          }
 
-        // 建立選項字串
-        const optionsList = sortedNames.map(name => {
-          const listData = lists[name];
-          const count = listData.count || (Array.isArray(listData) ? listData.length : 0);
-          const createdAt = formatDate(listData.createdAt);
-          const timeStr = createdAt ? ` (${count}塊 ${createdAt})` : ` (${count}塊)`;
-          return `<option value="${name}">${name}${timeStr}</option>`;
-        }).join('');
+          try {
+            let lists = JSON.parse(localStorage.getItem('boardsLists')) || {};
+            const existingNames = Object.keys(lists);
 
-        const hasExisting = existingNames.length > 0;
-        const selectHtml = hasExisting ? 
-          `<label for="existingList" style="display:block; margin-bottom:5px; font-size:14px;">或選擇現有清單覆蓋：</label>
+            // 準備現有清單選項（按時間排序）
+            const sortedNames = existingNames.sort((a, b) => {
+              const timeA = lists[a].createdAt || '1970-01-01';
+              const timeB = lists[b].createdAt || '1970-01-01';
+              return new Date(timeB) - new Date(timeA);
+            });
+
+            const formatDate = (isoString) => {
+              if (!isoString) return '';
+              try {
+                return new Date(isoString).toLocaleString('zh-TW', {
+                  month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+                });
+              } catch (e) {
+                return '';
+              }
+            };
+
+            // 建立選項字串
+            const optionsList = sortedNames.map(name => {
+              const listData = lists[name];
+              const count = listData.count || (Array.isArray(listData) ? listData.length : 0);
+              const createdAt = formatDate(listData.createdAt);
+              const timeStr = createdAt ? ` (${count}塊 ${createdAt})` : ` (${count}塊)`;
+              return `<option value="${name}">${name}${timeStr}</option>`;
+            }).join('');
+
+            const hasExisting = existingNames.length > 0;
+            const selectHtml = hasExisting ?
+              `<label for="existingList" style="display:block; margin-bottom:5px; font-size:14px;">或選擇現有清單覆蓋：</label>
            <select id="existingList" class="swal2-select" style="margin-bottom:10px;">
              <option value="">-- 選擇現有清單 --</option>
              ${optionsList}
            </select>` : '';
 
-        Swal.fire({
-          title: '儲存清單',
-          html: `
+            Swal.fire({
+              title: '儲存清單',
+              html: `
             <label for="newListName" style="display:block; margin-bottom:5px; font-size:14px;">輸入新的清單名稱：</label>
             <input type="text" id="newListName" class="swal2-input" placeholder="例如：2025-06-24 專案A" style="margin-bottom:10px;">
             ${selectHtml}
           `,
-          showCancelButton: true,
-          confirmButtonText: '儲存',
-          cancelButtonText: '取消',
-          focusConfirm: false,
-          preConfirm: () => {
-            const newName = document.getElementById('newListName').value.trim();
-            const selectedExisting = hasExisting ? document.getElementById('existingList').value : '';
-            
-            const finalName = selectedExisting || newName;
-            
-            if (!finalName) {
-              Swal.showValidationMessage('請輸入清單名稱或選擇現有清單');
-              return false;
-            }
-            if (/^boards$/.test(finalName)) {
-              Swal.showValidationMessage('此名稱為系統保留，請更換');
-              return false;
-            }
-            if (finalName.length > 50) {
-              Swal.showValidationMessage('清單名稱不能超過50個字元');
-              return false;
-            }
-            
-            return { name: finalName, isExisting: !!selectedExisting };
-          },
-          didOpen: () => {
-            // 設定選單變更事件
-            if (hasExisting) {
-              const selectEl = document.getElementById('existingList');
-              const inputEl = document.getElementById('newListName');
-              
-              selectEl.addEventListener('change', function() {
-                if (this.value) {
-                  inputEl.value = this.value;
-                  inputEl.style.opacity = '0.6';
-                  inputEl.readOnly = true;
+              showCancelButton: true,
+              confirmButtonText: '儲存',
+              cancelButtonText: '取消',
+              focusConfirm: false,
+              preConfirm: () => {
+                const newName = document.getElementById('newListName').value.trim();
+                const selectedExisting = hasExisting ? document.getElementById('existingList').value : '';
+
+                const finalName = selectedExisting || newName;
+
+                if (!finalName) {
+                  Swal.showValidationMessage('請輸入清單名稱或選擇現有清單');
+                  return false;
+                }
+                if (/^boards$/.test(finalName)) {
+                  Swal.showValidationMessage('此名稱為系統保留，請更換');
+                  return false;
+                }
+                if (finalName.length > 50) {
+                  Swal.showValidationMessage('清單名稱不能超過50個字元');
+                  return false;
+                }
+
+                return { name: finalName, isExisting: !!selectedExisting };
+              },
+              didOpen: () => {
+                // 設定選單變更事件
+                if (hasExisting) {
+                  const selectEl = document.getElementById('existingList');
+                  const inputEl = document.getElementById('newListName');
+
+                  selectEl.addEventListener('change', function () {
+                    if (this.value) {
+                      inputEl.value = this.value;
+                      inputEl.style.opacity = '0.6';
+                      inputEl.readOnly = true;
+                    } else {
+                      inputEl.value = '';
+                      inputEl.style.opacity = '1';
+                      inputEl.readOnly = false;
+                      inputEl.focus();
+                    }
+                  });
+
+                  inputEl.addEventListener('input', function () {
+                    if (this.value !== selectEl.value) {
+                      selectEl.value = '';
+                      this.style.opacity = '1';
+                      this.readOnly = false;
+                    }
+                  });
+                }
+              }
+            }).then(result => {
+              if (result.isConfirmed && result.value) {
+                const { name, isExisting } = result.value;
+
+                if (isExisting || lists[name]) {
+                  // 覆蓋現有清單
+                  Swal.fire({
+                    title: '確認覆蓋',
+                    text: `清單「${name}」已存在，確定要覆蓋嗎？`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '確定覆蓋',
+                    cancelButtonText: '取消'
+                  }).then(confirmResult => {
+                    if (confirmResult.isConfirmed) {
+                      this.saveBoardsListConfirmed(name, lists);
+                    }
+                  });
                 } else {
-                  inputEl.value = '';
-                  inputEl.style.opacity = '1';
-                  inputEl.readOnly = false;
-                  inputEl.focus();
-                }
-              });
-              
-              inputEl.addEventListener('input', function() {
-                if (this.value !== selectEl.value) {
-                  selectEl.value = '';
-                  this.style.opacity = '1';
-                  this.readOnly = false;
-                }
-              });
-            }
-          }
-        }).then(result => {
-          if (result.isConfirmed && result.value) {
-            const { name, isExisting } = result.value;
-            
-            if (isExisting || lists[name]) {
-              // 覆蓋現有清單
-              Swal.fire({
-                title: '確認覆蓋',
-                text: `清單「${name}」已存在，確定要覆蓋嗎？`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '確定覆蓋',
-                cancelButtonText: '取消'
-              }).then(confirmResult => {
-                if (confirmResult.isConfirmed) {
+                  // 新增清單
                   this.saveBoardsListConfirmed(name, lists);
                 }
-              });
-            } else {
-              // 新增清單
-              this.saveBoardsListConfirmed(name, lists);
-            }
+              }
+            });
+          } catch (e) {
+            Swal.fire({ icon: 'error', title: '儲存失敗', text: '無法存取本地儲存空間。' });
           }
-        });
-      } catch (e) {
-        Swal.fire({ icon: 'error', title: '儲存失敗', text: '無法存取本地儲存空間。' });
-      }
-    },
-    saveBoardsListConfirmed(name, lists) {
-      try {
-        lists[name] = {
-          boards: this.boards,
-          createdAt: new Date().toISOString(),
-          count: this.boards.length
-        };
-        localStorage.setItem('boardsLists', JSON.stringify(lists));
-        Swal.fire({ icon: 'success', title: '已儲存', text: `清單「${name}」已儲存！` });
-      } catch (e) {
-        Swal.fire({ icon: 'error', title: '儲存失敗', text: '本地儲存空間可能已滿。' });
-      }
-    },
-    showBoardsListManager() {
-      let lists = {};
-      try {
-        lists = JSON.parse(localStorage.getItem('boardsLists')) || {};
-      } catch (e) {
-        Swal.fire({ icon: 'error', title: '讀取失敗', text: '無法讀取已儲存的清單。' });
-        return;
-      }
-      
-      const keys = Object.keys(lists);
-      if (keys.length === 0) {
-        Swal.fire({ icon: 'info', title: '無儲存清單', text: '目前尚未有任何已儲存的清單。' });
-        return;
-      }
+        },
+        saveBoardsListConfirmed(name, lists) {
+          try {
+            lists[name] = {
+              boards: this.boards,
+              createdAt: new Date().toISOString(),
+              count: this.boards.length
+            };
+            localStorage.setItem('boardsLists', JSON.stringify(lists));
+            Swal.fire({ icon: 'success', title: '已儲存', text: `清單「${name}」已儲存！` });
+          } catch (e) {
+            Swal.fire({ icon: 'error', title: '儲存失敗', text: '本地儲存空間可能已滿。' });
+          }
+        },
+        showBoardsListManager() {
+          let lists = {};
+          try {
+            lists = JSON.parse(localStorage.getItem('boardsLists')) || {};
+          } catch (e) {
+            Swal.fire({ icon: 'error', title: '讀取失敗', text: '無法讀取已儲存的清單。' });
+            return;
+          }
 
-      // 按建立時間排序（新的在前）
-      const sortedKeys = keys.sort((a, b) => {
-        const timeA = lists[a].createdAt || '1970-01-01';
-        const timeB = lists[b].createdAt || '1970-01-01';
-        return new Date(timeB) - new Date(timeA);
-      });
+          const keys = Object.keys(lists);
+          if (keys.length === 0) {
+            Swal.fire({ icon: 'info', title: '無儲存清單', text: '目前尚未有任何已儲存的清單。' });
+            return;
+          }
 
-      const formatDate = (isoString) => {
-        if (!isoString) return '未知時間';
-        try {
-          return new Date(isoString).toLocaleString('zh-TW', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit'
+          // 按建立時間排序（新的在前）
+          const sortedKeys = keys.sort((a, b) => {
+            const timeA = lists[a].createdAt || '1970-01-01';
+            const timeB = lists[b].createdAt || '1970-01-01';
+            return new Date(timeB) - new Date(timeA);
           });
-        } catch (e) {
-          return '未知時間';
-        }
-      };
 
-      Swal.fire({
-        title: '載入/管理清單',
-        html: `<div style='text-align:left; max-height:400px; overflow-y:auto;'>${sortedKeys.map(name => {
-          const listData = lists[name];
-          const count = listData.count || (Array.isArray(listData) ? listData.length : 0);
-          const createdAt = formatDate(listData.createdAt);
-          return `<div class='border rounded p-3 mb-3' style='background:#f8f9fa;'>
+          const formatDate = (isoString) => {
+            if (!isoString) return '未知時間';
+            try {
+              return new Date(isoString).toLocaleString('zh-TW', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit'
+              });
+            } catch (e) {
+              return '未知時間';
+            }
+          };
+
+          Swal.fire({
+            title: '載入/管理清單',
+            html: `<div style='text-align:left; max-height:400px; overflow-y:auto;'>${sortedKeys.map(name => {
+              const listData = lists[name];
+              const count = listData.count || (Array.isArray(listData) ? listData.length : 0);
+              const createdAt = formatDate(listData.createdAt);
+              return `<div class='border rounded p-3 mb-3' style='background:#f8f9fa;'>
             <div class='fw-bold mb-1'>${name}</div>
             <div class='small text-muted mb-2'>
               <i class='fas fa-cube me-1'></i>${count} 塊木板 | 
@@ -594,368 +633,385 @@ createApp({
               </button>
             </div>
           </div>`;
-        }).join('')}</div>`,
-        showConfirmButton: false,
-        showCloseButton: true,
-        width: '600px',
-        didOpen: () => {
-          window.__loadBoardsList = (name) => {
-            const decoded = decodeURIComponent(name);
-            const listData = lists[decoded];
-            const boardsToLoad = Array.isArray(listData) ? listData : (listData.boards || []);
-            
-            // 如果目前有資料，詢問是否要覆蓋
-            if (this.boards.length > 0) {
-              Swal.fire({
-                title: '確認載入',
-                text: `載入清單將會覆蓋目前的 ${this.boards.length} 塊木板，確定要繼續嗎？`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '確定載入',
-                cancelButtonText: '取消'
-              }).then(res => {
-                if (res.isConfirmed) {
+            }).join('')}</div>`,
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: '600px',
+            didOpen: () => {
+              window.__loadBoardsList = (name) => {
+                const decoded = decodeURIComponent(name);
+                const listData = lists[decoded];
+                const boardsToLoad = Array.isArray(listData) ? listData : (listData.boards || []);
+
+                // 如果目前有資料，詢問是否要覆蓋
+                if (this.boards.length > 0) {
+                  Swal.fire({
+                    title: '確認載入',
+                    text: `載入清單將會覆蓋目前的 ${this.boards.length} 塊木板，確定要繼續嗎？`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '確定載入',
+                    cancelButtonText: '取消'
+                  }).then(res => {
+                    if (res.isConfirmed) {
+                      this.boards = boardsToLoad;
+                      Swal.close();
+                      Swal.fire({ icon: 'success', title: '已載入', text: `清單「${decoded}」已載入！` });
+                    }
+                  });
+                } else {
                   this.boards = boardsToLoad;
                   Swal.close();
                   Swal.fire({ icon: 'success', title: '已載入', text: `清單「${decoded}」已載入！` });
                 }
-              });
-            } else {
-              this.boards = boardsToLoad;
-              Swal.close();
-              Swal.fire({ icon: 'success', title: '已載入', text: `清單「${decoded}」已載入！` });
-            }
-          };
-          window.__deleteBoardsList = (name) => {
-            const decoded = decodeURIComponent(name);
-            Swal.fire({
-              title: `確定要刪除「${decoded}」？`,
-              text: '此操作無法復原',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: '刪除',
-              cancelButtonText: '取消'
-            }).then(res => {
-              if (res.isConfirmed) {
-                try {
-                  delete lists[decoded];
-                  localStorage.setItem('boardsLists', JSON.stringify(lists));
-                  Swal.close();
-                  Swal.fire({ icon: 'success', title: '已刪除', text: `清單「${decoded}」已刪除。` }).then(() => {
-                    // 重新開啟管理界面（如果還有清單的話）
-                    if (Object.keys(lists).length > 0) {
-                      this.showBoardsListManager();
+              };
+              window.__deleteBoardsList = (name) => {
+                const decoded = decodeURIComponent(name);
+                Swal.fire({
+                  title: `確定要刪除「${decoded}」？`,
+                  text: '此操作無法復原',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: '刪除',
+                  cancelButtonText: '取消'
+                }).then(res => {
+                  if (res.isConfirmed) {
+                    try {
+                      delete lists[decoded];
+                      localStorage.setItem('boardsLists', JSON.stringify(lists));
+                      Swal.close();
+                      Swal.fire({ icon: 'success', title: '已刪除', text: `清單「${decoded}」已刪除。` }).then(() => {
+                        // 重新開啟管理界面（如果還有清單的話）
+                        if (Object.keys(lists).length > 0) {
+                          this.showBoardsListManager();
+                        }
+                      });
+                    } catch (e) {
+                      Swal.fire({ icon: 'error', title: '刪除失敗', text: '無法刪除清單。' });
                     }
-                  });
-                } catch (e) {
-                  Swal.fire({ icon: 'error', title: '刪除失敗', text: '無法刪除清單。' });
+                  }
+                });
+              };
+            }
+          });
+        },
+        importCSV() {
+          try {
+            const lines = this.csvInput.trim().split(/\r?\n/).filter(line => line.trim());
+            if (lines.length === 0) throw new Error('沒有輸入資料');
+            const newBoards = [];
+            const errors = [];
+
+            for (let i = 0; i < lines.length; i++) {
+              const parts = lines[i].split(',').map(p => p.trim());
+              if (parts.length !== 3) {
+                errors.push(`第 ${i + 1} 行格式錯誤：${lines[i]}`);
+                continue;
+              }
+              let [label, w, l] = parts;
+              let width = parseFloat(w);
+              let length = parseFloat(l);
+              if (isNaN(width) || isNaN(length) || width <= 0 || length <= 0) {
+                errors.push(`第 ${i + 1} 行數值錯誤：${lines[i]}`);
+                continue;
+              }
+              newBoards.push({
+                id: Date.now() + Math.random(),
+                label: label || `未命名${this.boardCounter++}`,
+                width,
+                length
+              });
+            }
+
+            if (errors.length) throw new Error(errors.join('\n'));
+            this.boards = newBoards;
+            this.csvInput = '';
+
+            this.$nextTick(() => {
+              const collapseEl = document.getElementById('csvImport');
+              if (collapseEl) bootstrap.Collapse.getOrCreateInstance(collapseEl).hide();
+              Swal.fire({ icon: 'success', title: '匯入成功', text: `已匯入 ${newBoards.length} 筆資料` });
+            });
+          } catch (err) {
+            Swal.fire({ icon: 'error', title: '匯入失敗', text: err.message });
+          }
+        },
+        calculateLayout() {
+          // 檢查每塊木板的尺寸
+          for (const board of this.boards) {
+            if (board.width > this.materialWidth && board.length > this.materialWidth) {
+              Swal.fire({
+                icon: 'error',
+                title: '木板尺寸錯誤',
+                text: `木板 ${board.label} (${board.width.toFixed(1)}×${board.length.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
+              });
+              return;
+            }
+          }
+
+          // 加入預留量的木板尺寸（每邊各加預留量的一半）
+          const allBoards = this.boards.map(b => [
+            b.width + this.margin,
+            b.length + this.margin
+          ]);
+          const initialIndices = [...Array(allBoards.length).keys()];
+
+          // 再次檢查加入預留量後的尺寸
+          for (let [w, l] of allBoards) {
+            if (w > this.materialWidth && l > this.materialWidth) {
+              Swal.fire({
+                icon: 'error',
+                title: '預留量設定錯誤',
+                text: `加入預留量後，木板尺寸 (${w.toFixed(1)}×${l.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
+              });
+              return;
+            }
+          }
+
+          // 改用更快速的啟發式演算法
+          const [totalLength, layoutRaw] = this.findOptimalLayoutFast(initialIndices, allBoards);
+          if (!Array.isArray(layoutRaw)) {
+            Swal.fire({
+              icon: 'error',
+              title: '計算失敗',
+              text: '無法產生最佳佈局，請檢查木板尺寸與材料寬度設定。'
+            });
+            return;
+          }
+          const rows = layoutRaw.map(rowItemsRaw => {
+            const items = rowItemsRaw.map(item => ({
+              dims: item.dims,
+              rotated: item.rotated,
+              original_idx: item.original_idx
+            }));
+            return {
+              items,
+              row_length: Math.max(...items.map(i => i.dims[1])),
+              used_width: items.reduce((sum, i) => sum + i.dims[0], 0)
+            };
+          });
+
+          this.result = { totalLength, rows };
+          this.drawLayout();
+        },
+        // 使用啟發式貪婪演算法，提供瞬間計算且接近最佳解的結果，時間複雜度由 O(2^N) 降至 O(N^2)
+        findOptimalLayoutFast(boardIndices, allBoards) {
+          if (boardIndices.length === 0) return [0, []];
+          let bestTotalLength = Infinity;
+          let bestLayout = null;
+
+          // 嘗試多種不同的排序策略以求得較佳解
+          const strategies = [
+            (a, b) => Math.max(allBoards[b][0], allBoards[b][1]) - Math.max(allBoards[a][0], allBoards[a][1]), // 依最大邊遞減排序
+            (a, b) => (allBoards[b][0] * allBoards[b][1]) - (allBoards[a][0] * allBoards[a][1]),             // 依面積遞減排序
+            (a, b) => Math.min(allBoards[b][0], allBoards[b][1]) - Math.min(allBoards[a][0], allBoards[a][1]), // 依最小邊遞減排序
+            (a, b) => allBoards[b][1] - allBoards[a][1],                                                     // 依長度遞減排序
+            (a, b) => allBoards[b][0] - allBoards[a][0]                                                      // 依寬度遞減排序
+          ];
+
+          for (const st of strategies) {
+            let sorted = [...boardIndices].sort(st);
+            let rows = [];
+
+            for (let idx of sorted) {
+              let [w, l] = allBoards[idx];
+              let options = [{ dims: [w, l], rotated: false }];
+
+              if (this.allowRotation && w !== l) {
+                options.push({ dims: [l, w], rotated: true });
+              }
+
+              let bestPlace = null;
+              let minScore = Infinity;
+
+              for (let opt of options) {
+                let ow = opt.dims[0], ol = opt.dims[1];
+                if (ow > this.materialWidth) continue; // 該方向超過材料寬度無法放入
+
+                // 嘗試放入現有列
+                for (let r = 0; r < rows.length; r++) {
+                  let row = rows[r];
+                  if (row.usedWidth + ow <= this.materialWidth) {
+                    // 計算將此木板放入該列的「成本增加」與「空間浪費」
+                    let costIncrease = Math.max(0, ol - row.maxLength);
+                    let wasteSpace = (row.maxLength - ol > 0) ? (row.maxLength - ol) * ow : 0;
+                    let widthWaste = this.materialWidth - (row.usedWidth + ow);
+
+                    // 評分標準：成本增加越少越好，浪費空間越少越好 (權重可視需求調整)
+                    let score = costIncrease * 10000 + wasteSpace + widthWaste;
+                    if (score < minScore) {
+                      minScore = score;
+                      bestPlace = { r, opt, isNew: false };
+                    }
+                  }
+                }
+
+                // 嘗試建立新的一列 (新成本為長度乘上大權重，加上剩餘寬度)
+                let scoreNew = ol * 10000 + (this.materialWidth - ow);
+                if (scoreNew < minScore) {
+                  minScore = scoreNew;
+                  bestPlace = { r: rows.length, opt, isNew: true };
                 }
               }
-            });
-          };
-        }
-      });
-    },
-    importCSV() {
-      try {
-        const lines = this.csvInput.trim().split(/\r?\n/).filter(line => line.trim());
-        if (lines.length === 0) throw new Error('沒有輸入資料');
-        const newBoards = [];
-        const errors = [];
 
-        for (let i = 0; i < lines.length; i++) {
-          const parts = lines[i].split(',').map(p => p.trim());
-          if (parts.length !== 3) {
-            errors.push(`第 ${i + 1} 行格式錯誤：${lines[i]}`);
-            continue;
-          }
-          let [label, w, l] = parts;
-          let width = parseFloat(w);
-          let length = parseFloat(l);
-          if (isNaN(width) || isNaN(length) || width <= 0 || length <= 0) {
-            errors.push(`第 ${i + 1} 行數值錯誤：${lines[i]}`);
-            continue;
-          }
-          newBoards.push({
-            id: Date.now() + Math.random(),
-            label: label || `未命名${this.boardCounter++}`,
-            width,
-            length
-          });
-        }
+              if (!bestPlace) continue; // 尺寸已在此前驗證過，因此必然會有位置可放
 
-        if (errors.length) throw new Error(errors.join('\n'));
-        this.boards = newBoards;
-        this.csvInput = '';
-
-        this.$nextTick(() => {
-          const collapseEl = document.getElementById('csvImport');
-          if (collapseEl) bootstrap.Collapse.getOrCreateInstance(collapseEl).hide();
-          Swal.fire({ icon: 'success', title: '匯入成功', text: `已匯入 ${newBoards.length} 筆資料` });
-        });
-      } catch (err) {
-        Swal.fire({ icon: 'error', title: '匯入失敗', text: err.message });
-      }
-    },
-    calculateLayout() {
-      this.memo = {};
-      // 檢查每塊木板的尺寸
-      for (const board of this.boards) {
-        if (board.width > this.materialWidth && board.length > this.materialWidth) {
-          Swal.fire({
-            icon: 'error',
-            title: '木板尺寸錯誤',
-            text: `木板 ${board.label} (${board.width.toFixed(1)}×${board.length.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
-          });
-          return;
-        }
-      }
-
-      // 加入預留量的木板尺寸（每邊各加預留量的一半）
-      const allBoards = this.boards.map(b => [
-        b.width + this.margin, 
-        b.length + this.margin
-      ]);
-      const initialIndices = [...Array(allBoards.length).keys()];
-
-      // 再次檢查加入預留量後的尺寸
-      for (let [w, l] of allBoards) {
-        if (w > this.materialWidth && l > this.materialWidth) {
-          Swal.fire({
-            icon: 'error',
-            title: '預留量設定錯誤',
-            text: `加入預留量後，木板尺寸 (${w.toFixed(1)}×${l.toFixed(1)}) 即使旋轉後也大於材料寬度 ${this.materialWidth.toFixed(1)}`
-          });
-          return;
-        }
-      }
-
-      const [totalLength, layoutRaw] = this.findOptimalLayoutRecursive(initialIndices, allBoards);
-      if (!Array.isArray(layoutRaw)) {
-        Swal.fire({
-          icon: 'error',
-          title: '計算失敗',
-          text: '無法產生最佳佈局，請檢查木板尺寸與材料寬度設定。'
-        });
-        return;
-      }
-      const rows = layoutRaw.map(rowItemsRaw => {
-        const items = rowItemsRaw.map(item => ({
-          dims: item.dims,
-          rotated: item.rotated,
-          original_idx: item.original_idx
-        }));
-        return {
-          items,
-          row_length: Math.max(...items.map(i => i.dims[1])),
-          used_width: items.reduce((sum, i) => sum + i.dims[0], 0)
-        };
-      });
-
-      this.result = { totalLength, rows };
-      this.drawLayout();
-    },
-    findOptimalLayoutRecursive(boardIndices, allBoards) {
-      if (boardIndices.length === 0) return [0, []];
-      const key = boardIndices.join(',');
-      if (this.memo[key]) return this.memo[key];
-
-      let minTotalLength = Infinity;
-      let bestLayoutForThisCall = null;
-
-      for (let i = 1; i <= boardIndices.length; i++) {
-        const combinations = this.getCombinations(boardIndices, i);
-        for (let combo of combinations) {
-          const comboBoards = combo.map(idx => allBoards[idx]);
-          const numInCombo = combo.length;
-          const maxMask = this.allowRotation ? (1 << numInCombo) : 1;
-
-          let bestRowArrangement = null;
-          let minRowLength = Infinity;
-
-          for (let mask = 0; mask < maxMask; mask++) {
-            const currentArrangement = [];
-            let currentWidth = 0;
-            for (let j = 0; j < numInCombo; j++) {
-              let [w, l] = comboBoards[j];
-              let rotated = (mask >> j) & 1 && w !== l;
-              let dims = rotated ? [l, w] : [w, l];
-              currentArrangement.push({ dims, rotated });
-              currentWidth += dims[0];
-            }
-            if (currentWidth <= this.materialWidth) {
-              let rowLength = Math.max(...currentArrangement.map(item => item.dims[1]));
-              if (rowLength < minRowLength) {
-                minRowLength = rowLength;
-                bestRowArrangement = currentArrangement.map((item, idx) => ({
-                  dims: item.dims,
-                  rotated: item.rotated,
-                  original_idx: combo[idx]
-                }));
+              if (bestPlace.isNew) {
+                rows.push({
+                  items: [{ dims: bestPlace.opt.dims, rotated: bestPlace.opt.rotated, original_idx: idx }],
+                  usedWidth: bestPlace.opt.dims[0],
+                  maxLength: bestPlace.opt.dims[1]
+                });
+              } else {
+                let row = rows[bestPlace.r];
+                row.items.push({ dims: bestPlace.opt.dims, rotated: bestPlace.opt.rotated, original_idx: idx });
+                row.usedWidth += bestPlace.opt.dims[0];
+                row.maxLength = Math.max(row.maxLength, bestPlace.opt.dims[1]);
               }
             }
-          }
 
-          if (bestRowArrangement) {
-            const remaining = boardIndices.filter(x => !combo.includes(x));
-            const [remainingLength, remainingLayout] = this.findOptimalLayoutRecursive(remaining, allBoards);
-            const totalLength = minRowLength + remainingLength;
-
-            if (totalLength < minTotalLength) {
-              minTotalLength = totalLength;
-              bestLayoutForThisCall = [bestRowArrangement, ...remainingLayout];
+            // 算出該策略的總長度
+            let total = rows.reduce((s, r) => s + r.maxLength, 0);
+            // 如果這個策略的結果比現有的還要好，就記錄下來
+            if (total < bestTotalLength) {
+              bestTotalLength = total;
+              bestLayout = rows.map(r => r.items);
             }
           }
-        }
-      }
 
-      this.memo[key] = [minTotalLength, bestLayoutForThisCall];
-      return this.memo[key];
-    },
-    getCombinations(array, size) {
-      const result = [];
-      const combine = (start, combo) => {
-        if (combo.length === size) {
-          result.push([...combo]);
-          return;
-        }
-        for (let i = start; i < array.length; i++) {
-          combo.push(array[i]);
-          combine(i + 1, combo);
-          combo.pop();
-        }
-      };
-      combine(0, []);
-      return result;
-    },
-    drawLayout() {
-      this.$nextTick(() => {
-        this.result.rows.forEach((row, rowIndex) => {
-          const canvas = this.canvasRefs[rowIndex];
-          if (!canvas) return;
-          
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return;
-          
-          // 調整比例尺和間距
-          const scale = 50; // 放大比例尺，1台尺 = 60像素
-          const padding = 60; // 增加邊距
-          const spacing = 40; // 增加木板之間的間距
-          const rightMargin = 120; // 增加右側文字空間
-          const topPadding = 80; // 增加頂部空間
-          
-          // 計算這一列最高的木板高度
-          const maxHeight = Math.max(...row.items.map(item => item.dims[1])) * scale;
-          
-          // 計算 Canvas 所需寬度並加大
-          canvas.width = this.materialWidth * scale + padding * 2 + rightMargin;
-          // 縮減底部空間，只保留必要的 padding
-          canvas.height = maxHeight + topPadding + padding;
-          
-          // 清空畫布
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          
-          // 增加字體大小
-          ctx.font = '18px Arial';
-          ctx.textAlign = 'center';
-          
-          let currentX = padding;
-          row.items.forEach((item, itemIndex) => {
-            const width = item.dims[0] * scale;
-            const height = item.dims[1] * scale;
-            
-            // 繪製矩形
-            ctx.fillStyle = '#e9ecef';
-            ctx.strokeStyle = '#495057';
-            ctx.lineWidth = 2;
-            ctx.fillRect(currentX, topPadding, width, height);
-            ctx.strokeRect(currentX, topPadding, width, height);
-            
-            const textX = currentX + width/2;
-            const textY = topPadding + height/2;
-            
-            // 旋轉標記位置調整
-            if (item.rotated) {
-              ctx.fillStyle = '#212529';
+          return [bestTotalLength, bestLayout];
+        },
+        drawLayout() {
+          this.$nextTick(() => {
+            this.result.rows.forEach((row, rowIndex) => {
+              const canvas = this.canvasRefs[rowIndex];
+              if (!canvas) return;
+
+              const ctx = canvas.getContext('2d');
+              if (!ctx) return;
+
+              // 調整比例尺和間距
+              const scale = 50; // 1台尺 = 50像素
+              const padding = 60;
+              const spacing = 40;
+              const rightMargin = 120;
+              const topPadding = 80;
+              const mw = this.materialWidth; // 快取避免重複存取 this
+
+              // 計算這一列最高的木板高度
+              let maxDim1 = 0;
+              for (let i = 0; i < row.items.length; i++) {
+                if (row.items[i].dims[1] > maxDim1) maxDim1 = row.items[i].dims[1];
+              }
+              const maxHeight = maxDim1 * scale;
+
+              // 計算 Canvas 所需尺寸
+              canvas.width = mw * scale + padding * 2 + rightMargin;
+              canvas.height = maxHeight + topPadding + padding;
+
+              // 清空畫布並設定預設繪圖狀態（只設定一次）
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ctx.font = '18px Arial';
               ctx.textAlign = 'center';
-              ctx.fillText('R', textX, topPadding - 45);
-            }
 
-            // 寬度顯示位置調整（框外上方）及輔助線
-            ctx.fillStyle = '#212529';
-            ctx.textAlign = 'center';
-            
-            // 寬度輔助線
-            ctx.beginPath();
-            ctx.strokeStyle = '#212529';
-            // ctx.setLineDash([2, 2]);
-            ctx.moveTo(currentX, topPadding - 10);
-            ctx.lineTo(currentX + width, topPadding - 10);
-            // 左側豎線
-            ctx.moveTo(currentX, topPadding - 5);
-            ctx.lineTo(currentX, topPadding - 15);
-            // 右側豎線
-            ctx.moveTo(currentX + width, topPadding - 5);
-            ctx.lineTo(currentX + width, topPadding - 15);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // 寬度文字
-            ctx.fillText(`${item.dims[0].toFixed(2)}`, textX, topPadding - 15);
+              let currentX = padding;
+              row.items.forEach((item, itemIndex) => {
+                const width = item.dims[0] * scale;
+                const height = item.dims[1] * scale;
 
-            // 高度顯示位置調整（框外左側垂直）及輔助線
-            // 高度輔助線
-            ctx.beginPath();
-            ctx.strokeStyle = '#212529';
-            // ctx.setLineDash([2, 2]);
-            ctx.moveTo(currentX - 10, topPadding);
-            ctx.lineTo(currentX - 10, topPadding + height);
-            // 上方橫線
-            ctx.moveTo(currentX - 5, topPadding);
-            ctx.lineTo(currentX - 15, topPadding);
-            // 下方橫線
-            ctx.moveTo(currentX - 5, topPadding + height);
-            ctx.lineTo(currentX - 15, topPadding + height);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // 高度文字
-            ctx.save();
-            ctx.translate(currentX - 15, topPadding + height/2);
-            ctx.rotate(-Math.PI / 2);
-            ctx.fillText(`${item.dims[1].toFixed(2)}`, 0, 0);
-            ctx.restore();
-            
-            // 繪製木板編號
-            if (typeof item.original_idx === 'number' && this.boards[item.original_idx]) {
-              const label = this.boards[item.original_idx].label;
-              if (label) {
-                ctx.fillStyle = '#dc3545';
+                // 繪製矩形
+                ctx.fillStyle = '#e9ecef';
+                ctx.strokeStyle = '#495057';
+                ctx.lineWidth = 2;
+                ctx.fillRect(currentX, topPadding, width, height);
+                ctx.strokeRect(currentX, topPadding, width, height);
+
+                const textX = currentX + width / 2;
+                const textY = topPadding + height / 2;
+
+                // 旋轉標記位置調整
+                if (item.rotated) {
+                  ctx.fillStyle = '#212529';
+                  ctx.textAlign = 'center';
+                  ctx.fillText('R', textX, topPadding - 45);
+                }
+
+                // 寬度顯示位置調整（框外上方）及輔助線
+                ctx.fillStyle = '#212529';
                 ctx.textAlign = 'center';
-                ctx.font = 'bold 20px Arial'; // 放大編號字體
-                // 獲取文字的度量資訊來計算垂直置中位置
-                const metrics = ctx.measureText(label);
-                const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-                const verticalCenter = topPadding + height/2 + textHeight/2;
-                ctx.fillText(label, textX, verticalCenter);
-                ctx.font = '18px Arial'; // 恢復原來字體大小
-              }
-            }
-            
-            // 最後一塊木板的長度標示位置調整
-            if (itemIndex === row.items.length - 1) {
-              ctx.fillStyle = '#dc3545';
-              ctx.textAlign = 'left';
-              ctx.fillText(`長度: ${row.row_length.toFixed(1)}尺`, currentX + width + spacing, topPadding + height/2);
-            }
-            
-            currentX += width + (itemIndex < row.items.length - 1 ? spacing : 0);
+
+                // 寬度輔助線
+                ctx.beginPath();
+                ctx.strokeStyle = '#212529';
+                // ctx.setLineDash([2, 2]);
+                ctx.moveTo(currentX, topPadding - 10);
+                ctx.lineTo(currentX + width, topPadding - 10);
+                // 左側豎線
+                ctx.moveTo(currentX, topPadding - 5);
+                ctx.lineTo(currentX, topPadding - 15);
+                // 右側豎線
+                ctx.moveTo(currentX + width, topPadding - 5);
+                ctx.lineTo(currentX + width, topPadding - 15);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // 寬度文字
+                ctx.fillText(`${item.dims[0].toFixed(2)}`, textX, topPadding - 15);
+
+                // 高度顯示位置調整（框外左側垂直）及輔助線
+                // 高度輔助線
+                ctx.beginPath();
+                ctx.strokeStyle = '#212529';
+                // ctx.setLineDash([2, 2]);
+                ctx.moveTo(currentX - 10, topPadding);
+                ctx.lineTo(currentX - 10, topPadding + height);
+                // 上方橫線
+                ctx.moveTo(currentX - 5, topPadding);
+                ctx.lineTo(currentX - 15, topPadding);
+                // 下方橫線
+                ctx.moveTo(currentX - 5, topPadding + height);
+                ctx.lineTo(currentX - 15, topPadding + height);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // 高度文字
+                ctx.save();
+                ctx.translate(currentX - 15, topPadding + height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText(`${item.dims[1].toFixed(2)}`, 0, 0);
+                ctx.restore();
+
+                // 繪製木板編號
+                if (typeof item.original_idx === 'number' && this.boards[item.original_idx]) {
+                  const label = this.boards[item.original_idx].label;
+                  if (label) {
+                    ctx.fillStyle = '#dc3545';
+                    ctx.textAlign = 'center';
+                    ctx.font = 'bold 20px Arial'; // 放大編號字體
+                    // 獲取文字的度量資訊來計算垂直置中位置
+                    const metrics = ctx.measureText(label);
+                    const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+                    const verticalCenter = topPadding + height / 2 + textHeight / 2;
+                    ctx.fillText(label, textX, verticalCenter);
+                    ctx.font = '18px Arial'; // 恢復原來字體大小
+                  }
+                }
+
+                // 最後一塊木板的長度標示位置調整
+                if (itemIndex === row.items.length - 1) {
+                  ctx.fillStyle = '#dc3545';
+                  ctx.textAlign = 'left';
+                  ctx.fillText(`長度: ${row.row_length.toFixed(1)}尺`, currentX + width + spacing, topPadding + height / 2);
+                }
+
+                currentX += width + (itemIndex < row.items.length - 1 ? spacing : 0);
+              });
+            });
           });
-        });
-      });
-    },
-  }
-}).mount('#app');
-</script>
+        },
+      }
+    }).mount('#app');
+  </script>
 </body>
+
 </html>
