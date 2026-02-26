@@ -268,7 +268,15 @@
                     <span class="input-group-text">尺</span>
                   </div>
                 </div>
-                <div class="col-md-auto col-12">
+                <div class="col-md-auto col-12 col-sm-6 mt-md-0 mt-3">
+                  <div
+                    class="form-check form-switch d-flex align-items-center h-100 justify-content-md-start justify-content-center">
+                    <input class="form-check-input fs-5 mt-0 me-2" type="checkbox" v-model="board.completed"
+                      :id="'comp-'+board.id">
+                    <label class="form-check-label" :for="'comp-'+board.id">已完工</label>
+                  </div>
+                </div>
+                <div class="col-md-auto col-12 col-sm-6">
                   <button class="btn btn-outline-danger w-100" type="button" @click="removeBoard(board.id)">
                     <i class="fas fa-trash-alt me-2"></i>刪除
                   </button>
@@ -285,7 +293,17 @@
         </div>
         <div class="card-body">
           <div class="row g-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
+              <label class="form-label">計算設定</label>
+              <div class="input-group bg-transparent border-0 mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="excludeSwitch" v-model="excludeCompleted">
+                  <label class="form-check-label" for="excludeSwitch">排除已完工</label>
+                </div>
+              </div>
+              <small class="text-muted">勾選後，完工對象不計入</small>
+            </div>
+            <div class="col-md-3">
               <label class="form-label">材料寬度</label>
               <div class="input-group mb-1">
                 <input type="number" class="form-control" v-model.number="materialWidth" step="0.01" min="0">
@@ -293,7 +311,7 @@
               </div>
               <small class="text-muted">設定材料的標準寬度</small>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label class="form-label">預留量</label>
               <div class="input-group mb-1">
                 <input type="number" class="form-control" v-model.number="margin" step="0.01" min="0">
@@ -301,15 +319,15 @@
               </div>
               <small class="text-muted">設定切割間隙預留量</small>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label class="form-label">旋轉設定</label>
               <div class="input-group bg-transparent border-0 mb-1">
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="rotateSwitch" v-model="allowRotation">
-                  <label class="form-check-label" for="rotateSwitch">允許木板旋轉</label>
+                  <label class="form-check-label" for="rotateSwitch">允許旋轉</label>
                 </div>
               </div>
-              <small class="text-muted">允許旋轉以找出更好的排列方式</small>
+              <small class="text-muted">允許旋轉以找出更好排列</small>
             </div>
           </div>
         </div>
@@ -367,7 +385,8 @@
                 </div>
               </div>
               <div class="canvas-container">
-                <canvas :ref="el => { canvasRefs[rowIndex] = el }" width="800" height="300"></canvas>
+                <canvas :ref="el => { canvasRefs[rowIndex] = el }" width="800" height="300"
+                  @click="handleCanvasClick($event, rowIndex)" style="cursor: pointer;" title="點擊木板標記為完工"></canvas>
               </div>
             </div>
           </div>
@@ -391,8 +410,10 @@
           materialWidth: 4.6,
           margin: 0.3, // 預設預留量 0.3 台尺
           allowRotation: false,
+          excludeCompleted: false, // 預設不排除已完成的木板
           result: null,
           canvasRefs: {},
+          hitBoxes: {}, // 紀錄畫布上的點擊熱區
           boardCounter: 1,
           _saveTimer: null // 防抖用計時器（內部使用）
         };
@@ -421,8 +442,33 @@
         }
       },
       methods: {
+        handleCanvasClick(event, rowIndex) {
+          const canvas = this.canvasRefs[rowIndex];
+          if (!canvas) return;
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          const x = (event.clientX - rect.left) * scaleX;
+          const y = (event.clientY - rect.top) * scaleY;
+
+          const boxes = this.hitBoxes[rowIndex];
+          if (boxes) {
+            for (let box of boxes) {
+              if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
+                const idx = box.idx;
+                if (this.boards[idx]) {
+                  this.boards[idx].completed = !this.boards[idx].completed;
+                  // 使用 drawLayout 重新渲染 Canvas 動態反饋
+                  this.drawLayout();
+                }
+                break;
+              }
+            }
+          }
+        },
         addBoard() {
-          this.boards.push({ id: Date.now() + Math.random(), label: '', width: 0, length: 0 });
+          this.boards.push({ id: Date.now() + Math.random(), label: '', width: 0, length: 0, completed: false });
         },
         removeBoard(id) {
           const idx = this.boards.findIndex(b => b.id === id);
@@ -719,7 +765,8 @@
                 id: Date.now() + Math.random(),
                 label: label || `未命名${this.boardCounter++}`,
                 width,
-                length
+                length,
+                completed: false
               });
             }
 
@@ -754,7 +801,22 @@
             b.width + this.margin,
             b.length + this.margin
           ]);
-          const initialIndices = [...Array(allBoards.length).keys()];
+          const initialIndices = [];
+          for (let i = 0; i < this.boards.length; i++) {
+            if (!this.excludeCompleted || !this.boards[i].completed) {
+              initialIndices.push(i);
+            }
+          }
+
+          if (initialIndices.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: '沒有需計算的木板',
+              text: '清單為空，或者所有木板皆已標記完工且被設定為「排除」。'
+            });
+            this.result = null;
+            return;
+          }
 
           // 再次檢查加入預留量後的尺寸
           for (let [w, l] of allBoards) {
@@ -906,7 +968,9 @@
               const maxHeight = maxDim1 * scale;
 
               // 計算 Canvas 所需尺寸
-              canvas.width = mw * scale + padding * 2 + rightMargin;
+              // 繪置時每塊木板之間有加入 spacing 作為視覺區隔，需要將這些額外的間距加入總畫布寬度中，避免右側文字被擠出邊界
+              const extraSpacing = Math.max(0, row.items.length - 1) * spacing;
+              canvas.width = mw * scale + extraSpacing + padding * 2 + rightMargin;
               canvas.height = maxHeight + topPadding + padding;
 
               // 清空畫布並設定預設繪圖狀態（只設定一次）
@@ -914,20 +978,40 @@
               ctx.font = '18px Arial';
               ctx.textAlign = 'center';
 
+              if (!this.hitBoxes) this.hitBoxes = {};
+              this.hitBoxes[rowIndex] = [];
+
               let currentX = padding;
               row.items.forEach((item, itemIndex) => {
                 const width = item.dims[0] * scale;
                 const height = item.dims[1] * scale;
 
+                // 儲存可點擊判定區域
+                this.hitBoxes[rowIndex].push({
+                  x: currentX, y: topPadding, w: width, h: height, idx: item.original_idx
+                });
+
+                // 判斷是否已完工
+                const board = this.boards[item.original_idx];
+                const isCompleted = board && board.completed;
+
                 // 繪製矩形
-                ctx.fillStyle = '#e9ecef';
-                ctx.strokeStyle = '#495057';
+                ctx.fillStyle = isCompleted ? '#d1e7dd' : '#e9ecef'; // 已完工作為淺綠色
+                ctx.strokeStyle = isCompleted ? '#0f5132' : '#495057';
                 ctx.lineWidth = 2;
                 ctx.fillRect(currentX, topPadding, width, height);
                 ctx.strokeRect(currentX, topPadding, width, height);
 
                 const textX = currentX + width / 2;
                 const textY = topPadding + height / 2;
+
+                // 若完工，畫一個明顯的打勾浮水印
+                if (isCompleted) {
+                  ctx.fillStyle = 'rgba(15, 81, 50, 0.15)'; // 淺綠色透明水印
+                  ctx.font = 'bold 80px Arial';
+                  ctx.fillText('✓', textX, textY + 25);
+                  ctx.font = '18px Arial'; // 恢復
+                }
 
                 // 旋轉標記位置調整
                 if (item.rotated) {
